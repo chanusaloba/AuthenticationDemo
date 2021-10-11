@@ -48,7 +48,7 @@ namespace WeatherMvc.Controllers
                 client.SetBearerToken(tokenResponse.AccessToken);
 
                 var result = client
-                  .GetAsync("https://localhost:44328/weatherforecast")
+                  .GetAsync("http://localhost:44328/weatherforecast")
                   .Result;
 
                 if (result.IsSuccessStatusCode)
