@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,13 @@ namespace WeatherAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddAuthentication(defaultScheme: "Bearer")
                 .AddIdentityServerAuthentication("Bearer", configureOptions: options =>
                 {
                     options.ApiName = "weatherapi";
-                    options.Authority = "http://localhost:44323";
+                    options.Authority = "http://host.docker.internal:44323";
                     options.RequireHttpsMetadata = false;
                 });
             services.AddControllers();

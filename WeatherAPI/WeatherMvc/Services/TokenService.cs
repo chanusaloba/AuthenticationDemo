@@ -19,7 +19,13 @@ namespace WeatherMvc.Services
             _identityServerSettings = identityServerSettings;
 
             using var httpClient = new HttpClient();
-            _discoveryDocument = httpClient.GetDiscoveryDocumentAsync(identityServerSettings.Value.DiscoveryUrl).Result;
+            _discoveryDocument = httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest {
+                Address = identityServerSettings.Value.DiscoveryUrl,
+                Policy =
+                {
+                    RequireHttps = false
+                }
+            }).Result;
             if (_discoveryDocument.IsError)
             {
                 logger.LogError($"Unable to get discovery document. Error is: {_discoveryDocument.Error}");

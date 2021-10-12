@@ -48,7 +48,7 @@ namespace WeatherMvc.Controllers
                 client.SetBearerToken(tokenResponse.AccessToken);
 
                 var result = client
-                  .GetAsync("http://localhost:44328/weatherforecast")
+                  .GetAsync("http://host.docker.internal:44328/weatherforecast")
                   .Result;
 
                 if (result.IsSuccessStatusCode)
@@ -61,7 +61,7 @@ namespace WeatherMvc.Controllers
                 }
                 else
                 {
-                    throw new Exception("Unable to get content");
+                    throw new Exception("Unable to get content: " + tokenResponse.AccessToken);
                 }
             }
         }
