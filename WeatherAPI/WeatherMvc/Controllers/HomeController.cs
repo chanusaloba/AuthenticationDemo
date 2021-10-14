@@ -18,11 +18,13 @@ namespace WeatherMvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ITokenService _tokenService;
+        private readonly IWeatherService _weatherService;
 
-        public HomeController(ILogger<HomeController> logger, ITokenService tokenService)
+        public HomeController(ILogger<HomeController> logger, ITokenService tokenService, IWeatherService weatherService)
         {
             _logger = logger;
             _tokenService = tokenService;
+            _weatherService = weatherService;
         }
 
         public IActionResult Index()
@@ -43,12 +45,17 @@ namespace WeatherMvc.Controllers
             using (var client = new HttpClient())
             {
 
-                var tokenResponse = await _tokenService.GetToken("weatherapi.read");
+                //var tokenResponse = await _tokenService.GetToken("weatherapi.read");
 
-                client.SetBearerToken(tokenResponse.AccessToken);
+                //client.SetBearerToken(tokenResponse.AccessToken);
 
-                var result = await client
-                  .GetAsync("http://host.docker.internal:44328/weatherforecast");
+                //var result = await client
+                //  .GetAsync("http://host.docker.internal:44328/weatherforecast");
+
+                //Uses Client Factory Method
+                var token = await _tokenService.GetTokenClientFactoryVersion();
+
+                var result = await _weatherService.GetWeatherAPIData(token);
 
                 if (result.IsSuccessStatusCode)
                 {
@@ -60,7 +67,7 @@ namespace WeatherMvc.Controllers
                 }
                 else
                 {
-                    throw new Exception("Unable to get content: " + tokenResponse.AccessToken);
+                    throw new Exception("Unable to get content: ");
                 }
             }
         }

@@ -32,7 +32,7 @@ namespace WeatherAPI
                 .AddIdentityServerAuthentication("Bearer", configureOptions: options =>
                 {
                     options.ApiName = "weatherapi";
-                    options.Authority = "http://host.docker.internal:44323";
+                    options.Authority = "https://localhost:44323";
                     options.RequireHttpsMetadata = false;
                 });
             services.AddControllers();
